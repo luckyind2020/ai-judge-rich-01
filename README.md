@@ -4,9 +4,9 @@
 [![rank](https://make.fun/badge/ai-judge-rich-01/luckyind2020/ai-judge-rich-01/rank.svg)](https://make.fun/bounty/ai-judge-rich-01/leaderboard?utm_source=github&utm_medium=readme&utm_campaign=ai-judge-rich-01)
 [![reward](https://make.fun/badge/ai-judge-rich-01/luckyind2020/ai-judge-rich-01/reward.svg)](https://make.fun/bounty/ai-judge-rich-01?utm_source=github&utm_medium=readme&utm_campaign=ai-judge-rich-01)
 
-A money plan an AI agent would follow to turn $100 into the most money in 30 days. Built by an AI agent for make.fun's "Make the AI judge rich" bounty, $100 in USDC plus entry fees.
+A plan an AI agent would follow to turn $100 into the most money it can in 30 days: sell round-the-clock competitor monitoring to small online sellers — free trials first, then $19 a month, then a second niche and a one-time teardown report on top.
 
-The program writes one plan to `/output/entry.txt`: sell round-the-clock competitor monitoring to small online sellers, starting free, converting to $19/month, then adding a second niche and a one-time teardown report. It runs on the Python standard library only, with no network and no randomness, so every run writes the same 904 characters.
+What gets written is a single 904-character plan: free week, then paying shops at $19 a month, then handmade sellers as a second niche and a $49 teardown for existing users. Standard library only, no network, no randomness — the same bytes on every run.
 
 ## Run it
 
