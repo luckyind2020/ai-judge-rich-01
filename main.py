@@ -1,32 +1,29 @@
-#!/usr/bin/env python3
-"""Entry for make.fun's ai-judge-rich-01: "Make the AI judge rich".
+"""A 30-day plan for turning $100 into as much money as possible,
+saved as entry.txt for the judge.
 
-The program does one thing: write a single money plan to entry.txt.
-No network, no randomness, no arguments, no input files. The plan is
-a fixed string, so every run writes exactly the same bytes.
-
-Run it outside the grader with:
-    mkdir -p out && MAKEFUN_OUTPUT_DIR=out python3 main.py
+The plan itself is fixed text, so the output never varies from run
+to run. The program only checks the plan fits the bounty gate and
+puts it where the grader reads it. Point MAKEFUN_OUTPUT_DIR at a
+scratch folder to try it outside the grader.
 """
 
 import os
 import sys
+from pathlib import Path
 
-# The grader reads /output/entry.txt; MAKEFUN_OUTPUT_DIR stands in
-# for /output when the program runs outside the grader container.
-OUTPUT_DIR = os.environ.get("MAKEFUN_OUTPUT_DIR", "/output")
-ENTRY_FILENAME = "entry.txt"
 
-# The gate for this bounty: UTF-8 text of 1 to 1,000 characters.
-GATE_MIN_CHARS = 1
-GATE_MAX_CHARS = 1000
+def target_file():
+    """Where entry.txt goes: $MAKEFUN_OUTPUT_DIR, else /output."""
+    folder = os.getenv("MAKEFUN_OUTPUT_DIR") or "/output"
+    return Path(folder).joinpath("entry.txt")
+
 
 # The plan, one literal per phase. It sells a service only an agent
 # can deliver at the price: round-the-clock listing monitoring.
 # Every number in it is a commitment the plan itself has to keep.
 # The closing line states cash actually held on day 30, not a monthly
 # rate, because that is the number the plan is judged on.
-PLAN = (
+THE_PLAN = (
     "Sell 24/7 competitor watchdogs to small online sellers. "
     "Day 1: pick Etsy print-on-demand sellers and build a Python monitor on a free hosting tier "
     "that checks each shop's top 20 rival listings hourly and emails price and stock changes every morning. "
@@ -40,28 +37,18 @@ PLAN = (
 )
 
 
-def check_plan(text):
-    """Refuse to write a plan the bounty gate would reject."""
+def publish():
+    """Check the plan against the gate, then save it."""
+    text = THE_PLAN
     size = len(text)
-    if not GATE_MIN_CHARS <= size <= GATE_MAX_CHARS:
-        return f"plan is {size} characters, gate needs 1-1000"
-    if not text.strip():
-        return "plan is only whitespace"
-    return None
-
-
-def main():
-    problem = check_plan(PLAN)
-    if problem is not None:
-        print(f"error: {problem}", file=sys.stderr)
+    if size < 1 or size > 1000 or text.strip() == "":
+        print("plan does not fit the 1 to 1000 character gate", file=sys.stderr)
         return 1
-    os.makedirs(OUTPUT_DIR, exist_ok=True)
-    path = os.path.join(OUTPUT_DIR, ENTRY_FILENAME)
-    with open(path, "w", encoding="utf-8", newline="") as handle:
-        handle.write(PLAN)
-    print(f"wrote {len(PLAN)} characters to {path}")
+    spot = target_file()
+    spot.parent.mkdir(parents=True, exist_ok=True)
+    spot.write_bytes(text.encode("utf-8"))
+    print("saved " + str(size) + " characters to " + str(spot))
     return 0
 
 
-if __name__ == "__main__":
-    raise SystemExit(main())
+raise SystemExit(publish())
